@@ -8,7 +8,7 @@ function SareeList() {
 
     const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-    fetch(`${BASE_URL}/sarees/`)
+    fetch("https://subhadra-handlooms-backend.onrender.com/api/sarees/")
       .then((res) => res.json())
       .then((data) => setSarees(data))
       .catch((err) => console.error("Error fetching sarees:", err));

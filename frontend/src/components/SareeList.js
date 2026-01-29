@@ -63,14 +63,14 @@ function SareeList() {
       ? saree.image.startsWith("http")
         ? saree.image
         : `${API_BASE_URL}${saree.image}`
-      : "https://via.placeholder.com/300"
+      : "/banner.png"
   }
   alt={saree.name}
   className="product-image"
   loading="lazy"
   onError={(e) => {
     e.target.onerror = null;
-    e.target.src = "https://via.placeholder.com/300";
+    e.target.src = "/banner.png";
   }}
 />
             </Link>

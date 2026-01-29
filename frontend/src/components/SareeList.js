@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+const API_BASE_URL = "https://subhadra-handlooms-backend.onrender.com";
+
 function SareeList() {
   const [sarees, setSarees] = useState([]);
 
-  useEffect(() => {
-
-    const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-    fetch("https://subhadra-handlooms-backend.onrender.com/api/sarees/")
-      .then((res) => res.json())
-      .then((data) => setSarees(data))
-      .catch((err) => console.error("Error fetching sarees:", err));
-  }, []);
+ useEffect(() => {
+  fetch("https://subhadra-handlooms-backend.onrender.com/api/sarees/")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => setSarees(data))
+    .catch((err) => console.error("Error fetching sarees:", err));
+}, []);
 
   return (
     <div style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -54,13 +58,21 @@ function SareeList() {
           <div className="product-card" key={saree.id}>
             <Link to={`/saree/${saree.id}`}>
               <img
-                src={saree.image}
-                alt={saree.name}
-                className="product-image"
-                onError={(e) =>
-                  (e.target.src = "https://via.placeholder.com/300")
-                }
-              />
+  src={
+    saree.image
+      ? saree.image.startsWith("http")
+        ? saree.image
+        : `${API_BASE_URL}${saree.image}`
+      : "https://via.placeholder.com/300"
+  }
+  alt={saree.name}
+  className="product-image"
+  loading="lazy"
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "https://via.placeholder.com/300";
+  }}
+/>
             </Link>
 
             <h3>{saree.name}</h3>
